@@ -1,39 +1,35 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const get = require('lodash/get');
+const get = require("lodash/get");
 
-const {
-    TOKEN_LIFETIME, TOKEN_APP_LIFETIME
-} = process.env;
+const { TOKEN_LIFETIME, TOKEN_APP_LIFETIME } = process.env;
 
-exports.generateToken = (user, secret) => new Promise(resolve => {
-    const token = jwt.sign({ user },
-        secret,
-        {expiresIn: TOKEN_LIFETIME || '7d'}
-    );
+exports.generateToken = (user, secret) =>
+  new Promise((resolve) => {
+    const token = jwt.sign({ user }, secret, { expiresIn: TOKEN_LIFETIME || "7d" });
+    console.log(token);
     resolve(token);
-});
+  });
 
-exports.validateToken = (token, secret) => new Promise((resolve, reject) => {
+exports.validateToken = (token, secret) =>
+  new Promise((resolve, reject) => {
     jwt.verify(token, secret, (err, decoded) => {
-        if (err) {
-            return reject(err);
-        }
-        return resolve(get(decoded, 'user'));
+      if (err) {
+        return reject(err);
+      }
+      return resolve(get(decoded, "user"));
     });
-});
+  });
 
-exports.decodeToken = token => new Promise(resolve => {
+exports.decodeToken = (token) =>
+  new Promise((resolve) => {
     const decoded = jwt.decode(token);
     return resolve(decoded);
-});
+  });
 
-exports.generateAppToken = (user, secret) => new Promise(resolve => {
+exports.generateAppToken = (user, secret) =>
+  new Promise((resolve) => {
     delete user.jwtSign;
-    const token = jwt.sign(
-        { user },
-        secret,
-        {expiresIn: TOKEN_APP_LIFETIME || '99y'}
-    );
+    const token = jwt.sign({ user }, secret, { expiresIn: TOKEN_APP_LIFETIME || "99y" });
     resolve(token);
-});
+  });

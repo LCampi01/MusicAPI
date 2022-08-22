@@ -19,6 +19,7 @@ class PlaylistController extends CrudController {
       res.send(result);
     } catch (err) {
       logger.error(err);
+      console.log(err);
     }
   }
 
@@ -28,6 +29,7 @@ class PlaylistController extends CrudController {
       res.send(result);
     } catch (err) {
       logger.error(err);
+      console.log(err);
     }
   }
 
@@ -37,6 +39,7 @@ class PlaylistController extends CrudController {
       res.send(result);
     } catch (err) {
       logger.error(err);
+      console.log(err);
     }
   }
 
@@ -46,6 +49,7 @@ class PlaylistController extends CrudController {
       res.send(result);
     } catch (err) {
       logger.error(err);
+      console.log(err);
     }
   }
 
@@ -55,6 +59,7 @@ class PlaylistController extends CrudController {
       res.send(result);
     } catch (err) {
       logger.error(err);
+      console.log(err);
     }
   }
 }

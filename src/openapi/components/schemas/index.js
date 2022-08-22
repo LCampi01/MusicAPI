@@ -79,4 +79,8 @@ module.exports = {
       code: { type: "string" },
     },
   },
+  Token: {
+    type: "object",
+    properties: { code: { type: "string" } },
+  },
 };

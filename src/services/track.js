@@ -6,6 +6,19 @@ const { Track } = include("models");
 class TrackServices {
   constructor() {}
 
+  generateToken = async ({ code }) => {
+    //const trackCode = await this.fetchOne({ code });
+    console.log(code);
+    if (true) {
+      const secret = process.env.JWT_SECRET;
+      const token = await jsonWebToken.generateToken(code, secret);
+      return {
+        token,
+      };
+    }
+    return { error: "Invalid code." };
+  };
+
   createTrack = async ({ name, album, artist, duration, artwork, audio }) => {
     const code = toUpper(name.slice(2) + "-" + album.slice(2) + artist.slice(2));
     const alreadyExist = await Track.findOne({
