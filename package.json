@@ -1,0 +1,110 @@
+{
+  "name": "API",
+  "version": "0.0.1-SNAPSHOT",
+  "description": "API",
+  "main": "index.js",
+  "nodemonConfig": {
+    "ignore": [
+      "test/**/*.js",
+      "db/**/*.js",
+      "node_modules/**/node_modules"
+    ],
+    "restartable": "rs",
+    "delay": "3500",
+    "env": {
+      "NODE_ENV": "development"
+    }
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon",
+    "test": "npm run lint && npm run test:cover",
+    "test:teamcity": "cross-env NODE_ENV=test PORT=9999 nyc mocha",
+    "mocha": "cross-env NODE_ENV=test PORT=9999 mocha",
+    "test:cover": "cross-env NODE_ENV=test PORT=9999 nyc mocha",
+    "lint": "eslint ./src --ext .js",
+    "lint:fix": "eslint ./src --ext .js --fix",
+    "prepare": "npx husky install"
+  },
+  "directories": {
+    "test": "./test"
+  },
+  "nyc": {
+    "all": true,
+    "reporter": [
+      "text",
+      "html",
+      "teamcity"
+    ],
+    "check-coverage": true,
+    "lines": 20,
+    "statements": 20,
+    "functions": 20,
+    "branches": 20,
+    "exclude": [
+      "coverage/**/*.js",
+      "commitlint.config.js",
+      "src/app.js",
+      "src/global.js",
+      "src/index.js",
+      "db/**/*.js",
+      "test/**/*.js",
+      "src/helpers/*",
+      "src/routes/middleWares/authenticate.js",
+      "src/routes/middleWares/error.js"
+    ]
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-openapi-validator": "^4.13.8",
+    "helmet": "^5.1.1",
+    "js-yaml": "^4.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "mongoose": "^6.5.2",
+    "newrelic": "^9.0.0",
+    "node-fetch": "^3.2.10",
+    "require-dir": "^1.2.0",
+    "spdy": "^4.0.2",
+    "swagger-ui-express": "^4.5.0",
+    "uuidv4": "^6.2.13",
+    "winston": "^3.8.1"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.18.9",
+    "@commitlint/cli": "^17.0.3",
+    "cross-env": "^7.0.3",
+    "del": "^7.0.0",
+    "eslint": "^8.22.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-lodash": "^7.4.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "expect": "^28.1.3",
+    "husky": "^8.0.1",
+    "mocha": "^10.0.0",
+    "mongodb": "^4.8.1",
+    "mongodb-memory-server": "^8.3.0",
+    "nyc": "^15.1.0",
+    "should": "^13.2.3",
+    "sinon": "^14.0.0",
+    "supertest": "^6.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "https://",
+  "engines": {
+    "node": ">=16.15"
+  },
+  "author": "Gabriel Verges <stellarusi@gmail.com>",
+  "license": "MIT"
+}
