@@ -11,6 +11,7 @@ class PlaylistController extends CrudController {
     this.modifyPlaylist = this.modifyPlaylist.bind(this);
     this.getPlaylists = this.getPlaylists.bind(this);
     this.getPlaylist = this.getPlaylist.bind(this);
+    this.addTracks = this.addTracks.bind(this);
   }
 
   async createPlaylist(req, res) {
@@ -45,7 +46,7 @@ class PlaylistController extends CrudController {
 
   async getPlaylists(req, res) {
     try {
-      const result = await this._service.getPlaylists();
+      const result = await this._service.getPlaylists(req.body);
       res.send(result);
     } catch (err) {
       logger.error(err);
@@ -56,6 +57,16 @@ class PlaylistController extends CrudController {
   async getPlaylist(req, res) {
     try {
       const result = await this._service.modifyPlaylist(req.body);
+      res.send(result);
+    } catch (err) {
+      logger.error(err);
+      console.log(err);
+    }
+  }
+
+  async addTracks(req, res) {
+    try {
+      const result = await this._service.addTracks(req.body);
       res.send(result);
     } catch (err) {
       logger.error(err);

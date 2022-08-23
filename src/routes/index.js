@@ -32,7 +32,7 @@ const localRoute = (route) => {
 
 class Routes {
   static configure(app) {
-    app.use("/api", authenticate, require("./api")(Router()));
+    app.use("/api", require("./api")(Router()));
     Logger.info("Loading public-api...");
     app.use("/public-api", require("./public-api")(Router()));
     app.use("/", localRoute(Router()));

@@ -52,7 +52,7 @@ class TrackController extends CrudController {
 
   async getTracks(req, res) {
     try {
-      const result = await this._service.getTracks();
+      const result = await this._service.getTracks(req.body);
       res.send(result);
     } catch (err) {
       logger.error(err);

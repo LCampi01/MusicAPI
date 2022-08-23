@@ -2,6 +2,9 @@ const track = {
   type: "object",
   required: ["name", "album", "artist", "duration", "artwork", "audio"],
   properties: {
+    token: {
+      type: "string",
+    },
     name: {
       type: "string",
     },
@@ -27,6 +30,9 @@ const playlist = {
   type: "object",
   required: ["name", "creator", "playlist", "trackList"],
   properties: {
+    token: {
+      type: "string",
+    },
     name: {
       type: "string",
     },
@@ -42,7 +48,56 @@ const playlist = {
   },
 };
 
+const token = {
+  type: "object",
+  required: ["token"],
+  properties: {
+    token: {
+      type: "string",
+    },
+  },
+};
+
 module.exports = {
+  ArrayString: {
+    type: "array",
+    uniqueItems: true,
+    items: { type: "string" },
+  },
+  ArrayNumber: {
+    type: "array",
+    uniqueItems: true,
+    items: { type: "integer" },
+  },
+  ids: {
+    type: "array",
+    uniqueItems: true,
+    items: { type: "string" },
+  },
+  ID: { type: "string" },
+  Date: {
+    type: "string",
+    format: "date",
+  },
+  DateTime: {
+    type: "string",
+    format: "date-time",
+  },
+  Nullable: {
+    nullable: true,
+    not: {
+      anyOf: [
+        { type: "string" },
+        { type: "number" },
+        { type: "boolean" },
+        { type: "object" },
+        {
+          type: "array",
+          items: {},
+        },
+      ],
+    },
+  },
   Error: {
     type: "object",
     properties: {
@@ -53,34 +108,49 @@ module.exports = {
       message: { type: "string" },
     },
   },
-  Track: track,
-  TrackId: {
-    type: "object",
-    properties: { id: { type: "string" } },
-  },
-  TrackWithId: {
+  Track: {
+    ...token,
     ...track,
     properties: {
+      ...token.properties,
+      ...track.properties,
+    },
+  },
+  TrackId: {
+    ...token,
+    properties: { ...token.properties, id: { type: "string" }, code: { type: "string" } },
+  },
+  TrackWithId: {
+    ...token,
+    ...track,
+    properties: {
+      ...token.properties,
       ...track.properties,
       id: { type: "string" },
       code: { type: "string" },
     },
   },
-  Playlist: playlist,
-  PlaylistId: {
-    type: "object",
-    properties: { id: { type: "string" } },
-  },
-  PlaylistWithId: {
+  Playlist: {
+    ...token,
     ...playlist,
     properties: {
+      ...token.properties,
+      ...playlist.properties,
+    },
+  },
+  PlaylistId: {
+    ...token,
+    properties: { ...token.properties, id: { type: "string" }, code: { type: "string" } },
+  },
+  PlaylistWithId: {
+    ...token,
+    ...playlist,
+    properties: {
+      ...token.properties,
       ...playlist.properties,
       id: { type: "string" },
       code: { type: "string" },
     },
   },
-  Token: {
-    type: "object",
-    properties: { code: { type: "string" } },
-  },
+  Token: token,
 };

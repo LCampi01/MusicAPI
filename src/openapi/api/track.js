@@ -71,16 +71,16 @@ module.exports = {
     },
   },
   [`${API}/get-tracks`]: {
-    get: {
+    post: {
       operationId: "Get tracks.",
       security: [{}],
       description: "Get all tracks.",
-      requestBody: {
-        description: "Id and code",
-        required: true,
-        content: { "application/json": { schema: { $ref: "#/components/schemas/TrackId" } } },
-      },
       tags: ["Track"],
+      requestBody: {
+        description: "All fields are required.",
+        required: true,
+        content: { "application/json": { schema: { $ref: "#/components/schemas/Token" } } },
+      },
       responses: {
         200: {
           description: "Success",
@@ -101,11 +101,16 @@ module.exports = {
     },
   },
   [`${API}/get-track`]: {
-    get: {
+    post: {
       operationId: "Get track.",
       security: [{}],
       description: "Get all track.",
       tags: ["Track"],
+      requestBody: {
+        description: "All fields are required.",
+        required: true,
+        content: { "application/json": { schema: { $ref: "#/components/schemas/TrackId" } } },
+      },
       responses: {
         200: {
           description: "Success",

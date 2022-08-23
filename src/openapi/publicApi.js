@@ -2,15 +2,10 @@ const API = "/public-api";
 
 module.exports = {
   [`${API}/generate-token`]: {
-    post: {
+    get: {
       operationId: "Generate token.",
       security: [{}],
       description: "Generate token.",
-      requestBody: {
-        description: "Code is required.",
-        required: true,
-        content: { "application/json": { schema: { $ref: "#/components/schemas/Token" } } },
-      },
       tags: ["API pública"],
       responses: {
         200: {

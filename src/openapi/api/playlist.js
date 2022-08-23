@@ -71,12 +71,12 @@ module.exports = {
     },
   },
   [`${API}/get-playlist`]: {
-    get: {
+    post: {
       operationId: "Get playlist.",
       security: [{}],
       description: "Get all playlist.",
       requestBody: {
-        description: "Id and code",
+        description: "All fields are required.",
         required: true,
         content: { "application/json": { schema: { $ref: "#/components/schemas/PlaylistId" } } },
       },
@@ -101,11 +101,16 @@ module.exports = {
     },
   },
   [`${API}/get-playlists`]: {
-    get: {
+    post: {
       operationId: "Get playlists.",
       security: [{}],
       description: "Get all playlists.",
       tags: ["Playlist"],
+      requestBody: {
+        description: "All fields are required.",
+        required: true,
+        content: { "application/json": { schema: { $ref: "#/components/schemas/Token" } } },
+      },
       responses: {
         200: {
           description: "Success",
