@@ -8,7 +8,6 @@ const Logger = include("helpers/logger");
 const Error = include("helpers/error");
 
 /**
- * @author Gabriel Verges <stellarusiv@gmail.com>
  * @license M.I.T
  * @class Routes
  * links Routes of Application

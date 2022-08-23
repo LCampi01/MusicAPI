@@ -3,6 +3,7 @@ const { PlaylistServices: service } = include("services");
 
 const logger = require("../helpers/logger");
 
+const client = require("./redis-client");
 class PlaylistController extends CrudController {
   constructor() {
     super(service);
@@ -46,8 +47,18 @@ class PlaylistController extends CrudController {
 
   async getPlaylists(req, res) {
     try {
-      const result = await this._service.getPlaylists(req.body);
-      res.send(result);
+      await client.connect();
+      await client.get("playlist", async (err, reply) => {
+        if (reply) {
+          return res.send(JSON.parse(reply));
+        } else {
+          const result = await this._service.getPlaylists(req.body);
+          client.set("playlist", JSON.stringify(result), (err, reply) => {
+            if (err) res.send({ error: err });
+            res.send(result);
+          });
+        }
+      });
     } catch (err) {
       logger.error(err);
       console.log(err);
@@ -56,8 +67,18 @@ class PlaylistController extends CrudController {
 
   async getPlaylist(req, res) {
     try {
-      const result = await this._service.modifyPlaylist(req.body);
-      res.send(result);
+      await client.connect();
+      await client.get(`playlist${req.body.code}`, async (err, reply) => {
+        if (reply) {
+          return res.send(JSON.parse(reply));
+        } else {
+          const result = await this._service.getPlaylist(req.body);
+          client.set(`playlist${req.body.code}`, JSON.stringify(result), (err, reply) => {
+            if (err) res.send({ error: err });
+            res.send(result);
+          });
+        }
+      });
     } catch (err) {
       logger.error(err);
       console.log(err);

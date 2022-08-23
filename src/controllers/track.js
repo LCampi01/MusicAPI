@@ -3,6 +3,7 @@ const { TrackServices: service } = include("services");
 
 const logger = require("../helpers/logger");
 
+const client = require("./redis-client");
 class TrackController extends CrudController {
   constructor() {
     super(service);
@@ -52,8 +53,19 @@ class TrackController extends CrudController {
 
   async getTracks(req, res) {
     try {
-      const result = await this._service.getTracks(req.body);
-      res.send(result);
+      await client.connect();
+      await client.get("tracks", async (err, reply) => {
+        if (reply) {
+          return res.send(JSON.parse(reply));
+        } else {
+          const result = await this._service.getTracks(req.body);
+          client.set("tracks", JSON.stringify(result), (err, reply) => {
+            if (err) res.send({ error: err });
+
+            res.send(result);
+          });
+        }
+      });
     } catch (err) {
       logger.error(err);
     }
@@ -61,8 +73,18 @@ class TrackController extends CrudController {
 
   async getTrack(req, res) {
     try {
-      const result = await this._service.modifyTrack(req.body);
-      res.send(result);
+      await client.connect();
+      await client.get(`track${req.body.code}`, async (err, reply) => {
+        if (reply) {
+          return res.send(JSON.parse(reply));
+        } else {
+          const result = await this._service.getTrack(req.body);
+          client.set(`track${req.body.code}`, JSON.stringify(result), (err, reply) => {
+            if (err) res.send({ error: err });
+            res.send(result);
+          });
+        }
+      });
     } catch (err) {
       logger.error(err);
     }

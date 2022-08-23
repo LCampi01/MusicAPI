@@ -11,10 +11,8 @@ class PlaylistServices {
     try {
       const result = await jsonWebToken.validateToken(token, process.env.JWT_SECRET);
       if (result) {
-        const code = toUpper(name.slice(2) + "-" + creator.slice(2));
-        const alreadyExist = await Playlist.findOne({
-          code,
-        });
+        const code = (name.slice(2) + "-" + creator.slice(2)).toUpperCase();
+        const alreadyExist = await Playlist.findOne({ code });
         if (!alreadyExist) {
           const tracksExists = trackList.every((track) => Track.findOne({ _id: ObjectId(track._id) }));
           if (tracksExists) {
@@ -42,8 +40,18 @@ class PlaylistServices {
     try {
       const result = await jsonWebToken.validateToken(token, process.env.JWT_SECRET);
       if (result) {
-        const PlaylistToDelete = await Playlist.findOne({ _id: ObjectId(id), code });
-        if (PlaylistToDelete) return Playlist.updateOne({ _id: ObjectId(id), code }, { deleted: true });
+        const PlaylistToDelete = await Playlist.findOne({
+          _id: ObjectId(id),
+          code,
+        });
+        if (PlaylistToDelete)
+          return Playlist.updateOne(
+            {
+              _id: ObjectId(id),
+              code,
+            },
+            { deleted: true }
+          );
         return { error: "Playlist does not exist." };
       }
       return { error: "UNAUTHORIZED." };
@@ -56,13 +64,27 @@ class PlaylistServices {
     try {
       const result = await jsonWebToken.validateToken(token, process.env.JWT_SECRET);
       if (result) {
-        const PlaylistToModify = await Playlist.findOne({ _id: ObjectId(id), code });
+        const PlaylistToModify = await Playlist.findOne({
+          _id: ObjectId(id),
+          code,
+        });
         if (PlaylistToModify)
           if (trackList) {
             const tracksExists = trackList.every((track) => Track.findOne({ _id: ObjectId(track._id) }));
             if (!tracksExists) return { error: "Invalid track was introduced." };
           }
-        return Playlist.updateOne({ _id: ObjectId(id), code }, { name, creator, playtime, trackList });
+        return Playlist.updateOne(
+          {
+            _id: ObjectId(id),
+            code,
+          },
+          {
+            name,
+            creator,
+            playtime,
+            trackList,
+          }
+        );
       }
       return { error: "UNAUTHORIZED." };
     } catch (err) {
@@ -86,7 +108,10 @@ class PlaylistServices {
     try {
       const result = await jsonWebToken.validateToken(token, process.env.JWT_SECRET);
       if (result) {
-        const findedPlaylist = await Playlist.findOne({ _id: ObjectId(id), code });
+        const findedPlaylist = await Playlist.findOne({
+          _id: ObjectId(id),
+          code,
+        });
         if (findedPlaylist) return findedPlaylist;
         return { error: "Playlist does not exist." };
       }
@@ -100,13 +125,22 @@ class PlaylistServices {
     try {
       const result = await jsonWebToken.validateToken(token, process.env.JWT_SECRET);
       if (result) {
-        const findedPlaylist = await Playlist.findOne({ _id: ObjectId(id), code });
+        const findedPlaylist = await Playlist.findOne({
+          _id: ObjectId(id),
+          code,
+        });
         const { trackList } = findedPlaylist;
         if (findedPlaylist) {
           const tracksExists = trackList.every((track) => Track.findOne({ _id: ObjectId(track._id) }));
           if (!tracksExists) return { error: "Invalid track was introduced." };
           const tracksToUpdate = [...trackList, ...newTracks];
-          return Playlist.updateOne({ _id: ObjectId(id), code }, { trackList: tracksToUpdate });
+          return Playlist.updateOne(
+            {
+              _id: ObjectId(id),
+              code,
+            },
+            { trackList: tracksToUpdate }
+          );
         }
         return { error: "Playlist does not exist." };
       }
