@@ -68,12 +68,12 @@ class PlaylistController extends CrudController {
   async getPlaylist(req, res) {
     try {
       await client.connect();
-      await client.get(`playlist${req.body.code}`, async (err, reply) => {
+      await client.get(`playlist-${req.body.code}`, async (err, reply) => {
         if (reply) {
           return res.send(JSON.parse(reply));
         } else {
           const result = await this._service.getPlaylist(req.body);
-          client.set(`playlist${req.body.code}`, JSON.stringify(result), (err, reply) => {
+          client.set(`playlist-${req.body.code}`, JSON.stringify(result), (err, reply) => {
             if (err) res.send({ error: err });
             res.send(result);
           });

@@ -74,12 +74,12 @@ class TrackController extends CrudController {
   async getTrack(req, res) {
     try {
       await client.connect();
-      await client.get(`track${req.body.code}`, async (err, reply) => {
+      await client.get(`track-${req.body.code}`, async (err, reply) => {
         if (reply) {
           return res.send(JSON.parse(reply));
         } else {
           const result = await this._service.getTrack(req.body);
-          client.set(`track${req.body.code}`, JSON.stringify(result), (err, reply) => {
+          client.set(`track-${req.body.code}`, JSON.stringify(result), (err, reply) => {
             if (err) res.send({ error: err });
             res.send(result);
           });
